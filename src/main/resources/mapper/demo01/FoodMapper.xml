@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.et.demo01.mapper.FoodMapper">
+    <!--重点:-->
+        <!--使用#{键} 方式 实际上 是使用占位符 ？来 替代  默认情况下可以通过 #{0} #{1} 的方式取值，也可以通过 #{param1} #{param2}来取值-->
+        <!--使用${键} 方式 实际上 是使用值 直接替换对应的键 注意 如果是字符串 手工添加  ' '-->
+
+    <!-- 增加 -->
+    <insert id="insertFood">
+  	  insert into food values(#{food.id},#{food.name},#{food.price})
+    </insert>
+
+    <!--删除-->
+    <delete id="deleteFood">
+        delete from food where id=#{id}
+    </delete>
+
+    <!--修改-->
+    <update id="updateFood">
+        update food set
+            <trim suffixOverrides=",">
+                <if test="food.name !=null and food.name !=''">
+                    name = #{food.name},
+                </if>
+                <if test="food.price != null and food.price !=''">
+                    price = #{food.price},
+                </if>
+            </trim>
+
+        where id=#{food.id}
+    </update>
+
+    <!--相当于给sql取了一个别名，然后下面include调用-->
+    <!--<sql id="selectFood">-->
+        <!--SELECT * FROM-->
+    <!--</sql>-->
+
+    <!--查询所有的数据-->
+    <select id="foodList" resultType="cn.et.demo01.model.Food">
+        <!--<include refid="selectFood"></include>-->
+        select * from food
+    </select>
+
+    <!-- 根据条件查询 -->
+    <select id="selectFood" resultType="cn.et.demo01.model.Food">
+        SELECT * FROM food
+        <trim prefix="where" prefixOverrides="and">
+            <if test="food.name !=null and food.name !=''">
+                and name LIKE concat('%','${food.name}','%')
+            </if>
+            <if test="food.price != null and food.price !=''">
+                and price LIKE concat('%','${food.price}','%')
+            </if>
+        </trim>
+    </select>
+</mapper>

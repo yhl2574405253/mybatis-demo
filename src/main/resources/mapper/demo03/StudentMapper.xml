@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.et.demo03.xml.mapper.StudentMapper">
+
+    <!--
+        结果集映射：
+            数据库的列名和实体类的属性名 如果不一致  需要建立列名和属性名的映射关系
+            结果集映射返回的结果是相同的 都是classes 只是多了一层关系
+    -->
+    <resultMap id="studentMap" type="cn.et.demo03.xml.model.Student">
+        <id column="sid" property="name"></id>
+        <result column="sname" property="name"></result>
+        <association column="gid" property="grade" select="cn.et.demo03.xml.mapper.GradeMapper.gradeById"></association>
+    </resultMap>
+    <select id="ManyToOneById" resultMap="studentMap">
+        select * from student where sid=#{id}
+    </select>
+
+    <!--一对多的例子-->
+    <resultMap id="studentByGidMap" type="cn.et.demo03.xml.model.Student">
+        <id column="sid" property="name"></id>
+        <result column="sname" property="name"></result>
+    </resultMap>
+    <select id="studentByGid" resultMap="studentByGidMap">
+        select * from student where gid=#{id}
+    </select>
+
+    <!--鉴别器 判断返回数据，如果sid等于11就使用test1的resultMap，如果sid等于22就使用test2的resultMap-->
+    <resultMap id="test" type="cn.et.demo03.xml.model.Student">
+        <discriminator column="sid" javaType="string">
+            <case value="11" resultMap="test1"/>
+            <case value="22" resultMap="test2"/>
+        </discriminator>
+    </resultMap>
+    <resultMap id="test1" type="cn.et.demo03.xml.model.Student">
+        <result property="id" column="sid"/>
+    </resultMap>
+    <resultMap id="test2" type="cn.et.demo03.xml.model.Student">
+        <result property="name" column="sname"></result>
+    </resultMap>
+    <select id="test" resultMap="test">
+        select * from student where sid= #{id}
+    </select>
+
+</mapper>
