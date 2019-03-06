@@ -23,11 +23,12 @@
         <mapper resource="mapper/demo01/FoodMapper.xml"/>
         <mapper resource="mapper/demo03/GradeMapper.xml"/>
         <mapper resource="mapper/demo03/StudentMapper.xml"/>
+        <mapper resource="mapper/demo04/StudentMapper.xml"/>
 
         <mapper class="cn.et.demo02.mapper.FoodMapper"/>
         <mapper class="cn.et.demo03.annotation.mapper.GradeMapper"/>
         <mapper class="cn.et.demo03.annotation.mapper.StudentMapper"/>
-
+        <mapper class="cn.et.demo04.annotation.mapper.StudentMapper"/>
         <!-- 映射文件方式二，自动扫描包内的Mapper接口与配置文件 -->
         <!--<package name="mapper.demo01"/>-->
     </mappers>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.et.demo04.xml.mapper.StudentMapper">
+    <resultMap id="studentMap" type="cn.et.demo04.xml.model.Student">
+        <id column="sid" property="name"></id>
+        <result column="sname" property="name"></result>
+        <result column="sage" property="age"></result>
+        <result column="ssex" property="sex"></result>
+    </resultMap>
+
+    <!-- if 判断条件是否满足  满足 if中的sql 自动拼接到主sql
+    where 自动判断第一个条件是否存在where 如果没有where 追加 同时去掉一个and
+    trim 永远灵活度更高
+        prefix 配置的参数会被添加 在sql语句开始的地方
+        prefixOverrides sql语句首次出现的参数会被覆盖
+        suffix 配置的参数会被添加 在sql语句结束的地方
+        suffixOverrides sql语句最后一次出现的参数会被覆盖
+    -->
+    <select id="getStudent" resultMap="studentMap">
+        select * from student
+        <trim prefix="where" prefixOverrides="and">
+            <if test="sex != null and sex != ''">
+                and ssex = #{sex}
+            </if>
+            <if test="name !=null and name != ''">
+--                 方案一 使用concat 就是可以判断是否为空 这样有利于防止报错
+--                 and sname like concat('%','${name}','%')
+--                 方案二 用 '%${name}%' 的方式
+                and sname like '%${name}%'
+                <!--方案三 使用用一个bind标签 bind标签差不多就是 name定义一个名字 value给数据拼接-->
+                <!--<bind name="nameLike" value="'%'+name+'%'"></bind>-->
+                <!--and sname like #{nameLike}-->
+            </if>
+            <if test="age !=null and age != ''">
+                and sage = #{age}
+            </if>
+        </trim>
+    </select>
+
+    <!-- choose 判断条件是否满足  满足 when中的sql 自动拼接到主sql 不满足就进入 otherwise-->
+    <select id="queryStudentSex" resultMap="studentMap">
+        select * from student
+        <where>
+            <choose>
+                <when test="sex!=null and sex != ''">
+                    and ssex=#{sex}
+                </when>
+                <otherwise>
+                    and ssex='男'
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <!--
+    set标签 动态去掉最后一个条件,
+    trim实现set <trim prefix="set" prefixOverrides="" suffixOverrides="," suffix="">
+ -->
+    <update id="updateStudent">
+        update student
+        <set>
+            <if test="name!=null and name != ''">
+                sname=#{name},
+            </if>
+            <if test="age!=null and age != ''">
+                sage=#{age},
+            </if>
+            <if test="sex!=null and sex != ''">
+                ssex=#{sex}
+            </if>
+        </set>
+        where sid=#{id}
+    </update>
+
+    <!--
+    foreach
+    open表示 循环开始之前追加sql
+    close表示 循环结束之后追加的sql
+    collection指定传入的值的集合
+    separator 非最后一次的循环 值上添加 分隔符,
+    item 表示每一次循环的值被存储的变量名
+ -->
+    <select id="queryStudentByClasses" resultMap="studentMap">
+        select * from student
+        <foreach item="cid" collection="classesList" open="where gid in (" close=")" separator=",">
+            ${cid}
+        </foreach>
+    </select>
+
+
+
+</mapper>

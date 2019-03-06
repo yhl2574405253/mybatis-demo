@@ -27,7 +27,7 @@ public interface GradeMapper {
     @Results({
         @Result(property = "id",column = "gid"),
         @Result(property = "name",column = "gname"),
-        @Result(property = "list",column ="gid",javaType = List.class, many = @Many(select = "cn.et.demo03.annotation.mapper.StudentMapper.studentByGid"))
+        @Result(property = "list",column ="gid",javaType = List.class, many = @Many(select = "cn.et.demo03.annotation.mapper.StudentMapper.xml.studentByGid"))
     })
     @Select("select * from grade where gid =#{id}")
     Grade oneToMany(@Param("id") String id);
