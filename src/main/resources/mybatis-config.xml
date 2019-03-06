@@ -6,6 +6,11 @@
     <!-- 是mybatis的核心配置文件  数据库的连接信息（连接池） -->
     <properties resource="jdbc.properties"></properties>
 
+    <!--用来控制二级缓存 true 开启 false 关闭-->
+    <settings>
+        <setting name="cacheEnabled" value="true"/>
+    </settings>
+
     <environments default="mysql">
         <environment id="mysql">
             <transactionManager type="JDBC"></transactionManager>
@@ -17,6 +22,7 @@
             </dataSource>
         </environment>
     </environments>
+
     <!-- 映射sql语句的地址-->
     <mappers>
         <!--映射文件方式一，一个一个的配置xml-->
@@ -24,6 +30,7 @@
         <mapper resource="mapper/demo03/GradeMapper.xml"/>
         <mapper resource="mapper/demo03/StudentMapper.xml"/>
         <mapper resource="mapper/demo04/StudentMapper.xml"/>
+        <mapper resource="mapper/demo05/StudentMapper.xml"/>
 
         <mapper class="cn.et.demo02.mapper.FoodMapper"/>
         <mapper class="cn.et.demo03.annotation.mapper.GradeMapper"/>
@@ -32,4 +39,5 @@
         <!-- 映射文件方式二，自动扫描包内的Mapper接口与配置文件 -->
         <!--<package name="mapper.demo01"/>-->
     </mappers>
+
 </configuration>
