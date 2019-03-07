@@ -8,11 +8,12 @@
     FifoCache: 内存数据不足时 需要一种机制 保证内存不出现溢出 需要将旧的数据清除 最先插入的数据 最先清除
     LRU: 最近使用次数最少的 被优先清除
     LFU: 最近一段时间内使用次数最少
+    eviction="FIFO"  //回收策略为先进先出
+    flushInterval="60000" //自动刷新时间60s
+    size=“512” //最多缓存512个引用对象
+    readOnly="true  只读
  -->
-    <cache eviction="FIFO"
-           flushInterval="60000"
-           size="512" readOnly="true" type="cn.et.demo05.mapper.RedisCache">
-    </cache>
+    <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true" type="cn.et.demo05.mapper.RedisCache"></cache>
     <resultMap id="studentMap" type="cn.et.demo05.model.Student">
         <id column="sid" property="name"></id>
         <result column="sname" property="name"></result>

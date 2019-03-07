@@ -1,6 +1,8 @@
 package cn.et.demo05.model;
 
-public class Student {
+import java.io.Serializable;
+
+public class Student implements Serializable {
     private String id;
     private String name;
     private String age;

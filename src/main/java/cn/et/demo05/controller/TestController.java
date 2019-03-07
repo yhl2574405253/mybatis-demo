@@ -5,6 +5,7 @@ import cn.et.demo05.mapper.StudentMapper;
 import cn.et.demo05.model.Student;
 import cn.et.tools.DBTools;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.List;
 
@@ -32,15 +33,18 @@ public class TestController {
     }
 
     /**
-     * 二次缓存 同一个sessionFactory下的不同session 可以共享数据
+     * 二次缓存 同一个sessionFactory下的不同session 并且需要sqlSession1 close掉 可以共享数据,
      * @throws Exception
      */
     private static List<Student> test2()throws Exception{
-        SqlSession sqlSession1 = DBTools.getSession();
+        SqlSessionFactory sessionFactory = DBTools.getSessionFactory();
+
+        SqlSession sqlSession1 = sessionFactory.openSession();
         StudentMapper mapper1 = sqlSession1.getMapper(StudentMapper.class);
         List<Student> student1 = mapper1.studentList("2");
+        sqlSession1.close();
 
-        SqlSession sqlSession2 = DBTools.getSession();
+        SqlSession sqlSession2 = sessionFactory.openSession();
         StudentMapper mapper2 = sqlSession2.getMapper(StudentMapper.class);
         List<Student> student2 = mapper2.studentList("2");
 

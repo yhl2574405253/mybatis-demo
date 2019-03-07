@@ -20,4 +20,14 @@ public class DBTools {
         SqlSession session = sqlSessionFactory.openSession();
         return session;
     }
+
+    //封装一个工厂类
+    public static SqlSessionFactory getSessionFactory() throws IOException {
+        //读取连接池的
+        String resource = "mybatis-config.xml";
+        InputStream inputStream = Resources.getResourceAsStream(resource);
+        //工厂类
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+        return sqlSessionFactory;
+    }
 }
